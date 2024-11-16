@@ -1,0 +1,1234 @@
+let arr = [];
+let part = {
+    "Frame": {
+        "imageSrc": "",
+        "id": "",
+        "Description":"",
+        "price":"",
+        "brand":"",
+    },
+    "Fork": {
+        "imageSrc": "",
+        "id": "",
+        "Description":"",
+        "price":"",
+        "brand":"",
+        
+    },
+    "Crank": {
+        "imageSrc": "",
+        "id": "",
+        "Description":"",
+        "price":"",
+        "brand":"",
+    },
+    "Pedal": {
+        "imageSrc": "",
+        "id": "",
+        "Description":"",
+        "price":"",
+        "brand":"",
+    },
+    "RD": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Cogs": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Rim": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Wheel": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Stem": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Seattube": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Sit": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Break": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Chain": {
+        "imageSrc": "",
+        "id": ""
+    },
+    "Rotor": {
+        "imageSrc": "",
+        "id": ""
+    }
+};
+const partOrder = [
+    "Frame", "Fork", "Crank", "Pedal", "RD", "Cogs", "Rim", 
+    "Wheel", "Stem", "Seattube", "Sit", "Break","Chain", "Rotor"
+];
+
+// Back button function
+
+let total = 0;
+let currentPart = "Frame";  
+let latestImageSrc = ""; // Variable to store the latest image source
+
+const Frame     = new Image();  // Initialize the Frame Image object
+const Fork      = new Image();   // Initialize the Fork Image object
+const Crank     = new Image();
+const Pedal     = new Image();
+const RD        = new Image();
+const Cogs      = new Image();
+const Wheel     = new Image();
+const Rim       = new Image();
+const Stem      = new Image();
+const Seattube  = new Image();
+const Sit       = new Image();
+const Break     = new Image();
+const Rotor     = new Image();
+const Chain     = new Image();
+
+const ChainEx = new Image();
+const ChainEx1 = new Image();
+const ChainEx2 = new Image();
+const Excess    = new Image();
+
+                    ChainEx.src = "x3mshop/uploaded_files/chin1.png";
+                    ChainEx1.src = "x3mshop/uploaded_files/chin3.png";
+                    ChainEx2.src = "x3mshop/uploaded_files/chin6.png";
+
+Excess.src = "x3mshop/uploaded_files/handle.png";
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    
+    let angle = 0;
+    let loadingAnimationId;
+
+// Function to draw loading animation
+    function drawLoading() {
+    clearCanvas(); // Clear the canvas
+    context.save();
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate(angle);
+    context.beginPath();
+    context.arc(0, 0, 30, 0, Math.PI * 1.5); // Spinning arc
+    context.lineWidth = 5;
+    context.strokeStyle = 'blue';
+    context.stroke();
+    context.restore();
+
+    angle += 0.1;
+    loadingAnimationId = requestAnimationFrame(drawLoading); // Keep animating until timeout
+    }
+
+    
+    
+    setupAddButtonListener();
+    reattachImageClickListeners();  // Setup the image click listeners initially
+    canvas.style.border = "None";
+    canvas.style.background = "gray";
+    function applyZoomBasedOnScaling() {
+        const devicePixelRatio = window.devicePixelRatio;
+
+        // Apply different scales based on display settings
+        if (devicePixelRatio === 1) {
+            // 100% scaling
+            document.body.style.transform = 'scale(1)';
+            document.body.style.width = '100%';
+            document.body.style.height = '100%';
+        } else if (devicePixelRatio === 1.25) {
+            // 125% scaling
+            document.body.style.transform = 'scale(0.75)';
+            document.body.style.width = '133.33%';
+            document.body.style.height = '133.33%';
+        } else if (devicePixelRatio === 1.5) {
+            // 150% scaling
+            document.body.style.transform = 'scale(0.67)';
+            document.body.style.width = '150%';
+            document.body.style.height = '150%';
+        } else {
+            // Default fallback for other scaling
+            document.body.style.transform = 'scale(1)';
+        }
+    }
+
+    // Apply zoom when the page loads
+    applyZoomBasedOnScaling();
+
+    // Reapply zoom if the window is resized (optional)
+    window.addEventListener('resize', applyZoomBasedOnScaling);
+   
+
+    function updatePart() {
+
+        part.Frame.imageSrc           = arr[0];
+        part.Fork.imageSrc            = arr[1];
+        part.Crank.imageSrc           = arr[2];
+        part.Pedal.imageSrc           = arr[3];
+        part.RD.imageSrc              = arr[4];
+        part.Cogs.imageSrc            = arr[5];
+        part.Rim.imageSrc             = arr[6];
+        part.Wheel.imageSrc           = arr[7];
+        part.Stem.imageSrc            = arr[8];
+        part.Seattube.imageSrc        = arr[9];
+        part.Sit.imageSrc             = arr[10];
+        part.Break.imageSrc           = arr[11];
+        part.Chain.imageSrc           = arr[12];
+        part.Rotor.imageSrc           = arr[13];
+       
+    }
+    function createNew(){
+        window.location.reload();
+    }
+    let createNewBike = document.getElementById('new');
+
+    createNewBike.addEventListener('click', ()=>{
+        if(confirm('Are you sure you want to create new?')){
+            createNew();
+        }else{
+            modal.showModal();
+        }
+        
+    })
+    
+
+    function goBack() {
+        const currentIndex = partOrder.indexOf(currentPart);
+    
+        if (currentIndex === -1) {
+            console.log("Invalid part selected");
+            return currentPart;
+        }
+    
+        // Clear imageSrc for the current part and the one above it
+        part[partOrder[currentIndex]].imageSrc = "";
+    
+        if (currentIndex > 0) {
+            part[partOrder[currentIndex - 1]].imageSrc = "";
+            // Update currentPart to be the previous part
+            currentPart = partOrder[currentIndex - 1];
+        }
+    
+        console.log(`Cleared imageSrc for ${partOrder[currentIndex]} and ${partOrder[currentIndex - 1]}`);
+        console.log(`Updated currentPart to: ${currentPart}`);
+    
+        console.log(currentPart);
+        
+        
+        return currentPart; // Return the updated currentPart if needed
+            
+    }
+    const tableBody = document.getElementById('tableData');
+    var backBtn = document.getElementById('back');
+    
+    backBtn.addEventListener('click', ()=>{
+
+        const rows = document.querySelectorAll('#tableData .trElement');
+        
+        const lastRow = rows[rows.length - 1];
+
+        if (lastRow) {
+        // Get the price from the last row and convert it to a number
+        const price = parseFloat(lastRow.cells[3].innerHTML) || 0;
+        
+        // Subtract the price of the deleted row from the total
+        total -= price;
+        
+        // Update the total display
+        totalElement.textContent = "Total: ₱" + total.toFixed(2);
+       
+        // Remove the last row from the table
+        lastRow.remove();
+    }
+
+        
+        arr.pop();
+        updatePart();
+        goBack();
+        getPart();
+        
+        console.log(part);
+    });
+
+
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("openModalBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.addEventListener('click', ()=>{
+    modal.showModal();
+    modal.scrollTop = 0; 
+}); 
+
+// When the user clicks on <span> (x), close the modal
+span.addEventListener('click',()=> {
+    modal.close();
+});
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.close();
+    }
+}
+
+function CanvasImage(){
+    const dataURL = canvas.toDataURL('image/png');
+
+    document.getElementById("canvas-image").src = dataURL;
+}
+
+    // Function to clear the canvas
+    function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        
+    }
+
+    fetch("item.json")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        // Find the item where Image is 'frames.png'
+        const frameItem = data.find(item => item.image === "WN3RS7dx9Ps4VEUkBLxn.png");
+
+        // Display the frame first
+        if (frameItem) {
+            getPart(frameItem);
+        }
+
+        // Display the rest of the items, excluding the frame
+        data.forEach(function(item) {
+            if (item.image !== "WN3RS7dx9Ps4VEUkBLxn.png") {
+                getPart(item);
+            }
+        });
+    })
+    .catch(function(error) {
+        console.error("Error:", error);
+    });
+    
+    
+     // Declare total outside the function to keep it persistent
+    let selectedItemPrice = 0; // Track the currently selected item price
+    let selectedItemID = "";
+    let itemDesc = "";
+    let itemBrand = "";
+    //const tableData = document.querySelector('.tableData tr +tr');
+    
+// Assuming part is defined somewhere globally
+
+
+async function getPart() {
+    const addButton = document.querySelector('#add');  // Assuming the button has id 'addButton'
+    const mainElement = document.querySelector('main');
+    const descElement = document.querySelector('.desc p');
+
+    try {
+        // Step 1: Disable the Add button while loading
+        addButton.disabled = true;
+
+        // Step 2: Show loading animation for the main container
+        const loadingDiv = document.createElement('div');
+        loadingDiv.classList.add('loading');  // Add a 'loading' class for styling
+        loadingDiv.innerHTML = `<p>Loading...</p>`;  // Can customize with an actual animation if needed
+        mainElement.innerHTML = '';  // Clear the main content area
+        mainElement.appendChild(loadingDiv);  // Add the loading animation
+
+        // Send the data to the server (fetching part data)
+        const response = await fetch("script.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(part)
+        });
+
+        if (!response.ok) {
+            throw new Error("Error updating items.json");
+        }
+
+        const itemsResponse = await fetch("item.json");
+        const data = await itemsResponse.json();
+
+        // Step 3: Create a function to load images first, then append containers
+        const imagePromises = data.map(item => {
+            return new Promise((resolve) => {
+                const img = new Image();  // Use new Image() to load the image
+                img.src = "x3mshop/uploaded_files/" + item.image;
+                img.alt = item.name;
+
+                img.onload = () => {
+                    // Once image is loaded, create and append the container
+                    const container = document.createElement('div');
+                    container.style.borderRadius = "3px";
+                    container.classList.add('container');
+
+                    container.addEventListener('mouseover', () => {
+                        descElement.textContent = "Description: " + item.product_desc;
+                    });
+                    container.addEventListener('mouseout', () => {
+                        descElement.textContent = 'Description:';
+                    });
+
+                    container.addEventListener('click', () => {
+                        selectedItemPrice = parseFloat(item.price);
+                        selectedItemID = item.id;
+                        itemDesc = item.product_desc;
+                        itemBrand = item.name;
+                    });
+
+                    const imageDiv = document.createElement('div');
+                    imageDiv.classList.add('image');
+                    img.classList.add('item-image');
+                    imageDiv.appendChild(img);
+
+                    const priceDiv = document.createElement('div');
+                    priceDiv.classList.add('price');
+                    priceDiv.innerHTML = `<p>Price: ₱${item.price}</p>`;
+
+                    const brandDiv = document.createElement('div');
+                    brandDiv.classList.add('brand');
+                    brandDiv.innerHTML = `<p>Name: ${item.name}</p>`;
+
+                    container.appendChild(imageDiv);
+                    container.appendChild(priceDiv);
+                    container.appendChild(brandDiv);
+
+                    // Append the container to the mainElement after the image is loaded
+                    mainElement.appendChild(container);
+
+                    resolve();  // Resolve once the container is appended
+                };
+
+                img.onerror = () => {
+                    resolve();  // Resolve if the image fails to load, still adding the container
+                };
+            });
+        });
+
+        // Step 4: Wait for all images to load and containers to be appended
+        await Promise.all(imagePromises);
+
+        // Step 5: Once loading is done, remove the loading animation and re-enable the Add button
+        loadingDiv.style.display = 'none';  // Hide the loading animation
+
+        // Step 6: Ensure containers are visible after loading
+        const containers = document.querySelectorAll('.container');
+        containers.forEach(container => {
+            container.style.display = 'block';  // Ensure each container is visible
+        });
+
+        reattachImageClickListeners();
+
+    } catch (error) {
+        console.error("Error in getPart:", error);
+        mainElement.innerHTML = '';  // Clear loading animation on error
+    } finally {
+        // Re-enable the Add button after everything is done
+        addButton.disabled = false;  // Re-enable the Add button at the end (after network and processing)
+    }
+}
+
+
+
+
+// Add event listener for the "Add" button outside the getPart function
+const totalElement = document.querySelector('.total p');
+const Button = document.getElementById('add');
+const totalModal = document.querySelector('.totalCart');
+Button.addEventListener('click', () => {
+    
+    totalElement.textContent = "Total: ₱" + total.toFixed(2);
+    //totalModal.textContent = "Total: "+ total.toFixed(2);
+    // if (selectedItemPrice > 0) {
+    //     // Add the selected item price to the total
+    //     total += selectedItemPrice;
+    //     console.log("Added item price:", selectedItemPrice, "New total:", total);
+
+    //     // Update the total display
+    //         //totalElement.textContent = "Total: " + total.toFixed(2);
+    //         //totalModal.textContent = "Total: "+ total.toFixed(2);
+           
+        
+    //     // Reset selected item price after adding to prevent re-adding it
+    //     selectedItemPrice = 0;
+    // } else {
+    //     console.log("No item selected or item price is 0");
+    // }
+});
+
+// if (part[currentPart].price > 0) {
+//     // Add the selected item price to the total
+//     total += part[currentPart].price; // Use the price from the current part
+//     console.log("Added item price:", part[currentPart].price, "New total:", total);
+
+//     // Update the total display
+//     totalElement.textContent = "Total: " + total.toFixed(2);
+//     totalModal.textContent = "Total: " + total.toFixed(2);
+    
+//     // Reset selected item price after adding to prevent re-adding it
+//     selectedItemPrice = 0; // If you still need this line, you can keep it
+// } else {
+//     console.log("No item selected or item price is 0");
+// }
+
+// });
+    
+    
+    
+
+    // Function to draw an image on the canvas
+    function drawImg(img, x, y, w, h) {
+        context.drawImage(img, x, y, w, h);
+    }
+
+function reattachImageClickListeners() {
+    const images = document.querySelectorAll(".item-image");
+
+    images.forEach(function(image) {
+        image.addEventListener("click", function() {
+            const imageSrc = image.getAttribute("src"); // Get the image source
+            latestImageSrc = imageSrc; // Store the latest image source
+
+            if (currentPart === "Frame") {
+                console.log("Frame image selected:", imageSrc);
+                clearCanvas();
+                drawImg(Frame, 190, -7, 1030, 440);
+                Frame.src = imageSrc;
+            } else if (currentPart === "Fork") {
+                console.log("Fork image selected:", imageSrc);
+                clearCanvas();
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Frame, 190, -7, 1030, 440);
+                Fork.src = imageSrc;
+            } else if (currentPart === "Crank") {
+                console.log("Crank image selected:", imageSrc);
+                clearCanvas();
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                Crank.src = imageSrc;
+            } else if (currentPart === "Pedal") {
+                console.log("Pedal image selected", imageSrc);
+                clearCanvas();
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                Pedal.src = imageSrc;
+            } else if (currentPart === "RD") {
+                console.log("RD image selected", imageSrc);
+                clearCanvas();
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                RD.src = imageSrc;
+            } else if (currentPart === "Cogs") {
+                console.log("Cogs image selected", imageSrc);
+                clearCanvas();
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Cogs.src = imageSrc;
+            } else if (currentPart === "Rim") {
+                console.log("Rim image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Rim.src = imageSrc;
+            } else if (currentPart === "Wheel") {
+                console.log("Wheel image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Wheel, 260, 150, 290, 260);
+                drawImg(Wheel, 840, 120, 290, 260);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Wheel.src = imageSrc;
+            } else if (currentPart === "Stem") {
+                console.log("Stem image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Wheel, 260, 150, 290, 260);
+                drawImg(Wheel, 840, 120, 290, 260);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Stem, 813, 27, 75, 45);
+                drawImg(Excess, 838, 21, 83, 133);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Stem.src = imageSrc;
+            } else if (currentPart === "Seattube") {
+                console.log("Seattube image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Wheel, 260, 150, 290, 260);
+                drawImg(Wheel, 840, 120, 290, 260);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Stem, 813, 27, 75, 45);
+                drawImg(Excess, 838, 21, 83, 133);
+                drawImg(Seattube, 316, 20, 530, 170);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Seattube.src = imageSrc;
+            } else if (currentPart === "Sit") {
+                console.log("Sit image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Wheel, 260, 150, 290, 260);
+                drawImg(Wheel, 840, 120, 290, 260);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Stem, 813, 27, 75, 45);
+                drawImg(Excess, 838, 21, 83, 133);
+                drawImg(Seattube, 316, 20, 530, 170);
+                drawImg(Sit, 526, 43, 80, 25);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Sit.src = imageSrc;
+            } else if (currentPart === "Break") {
+                console.log("Break image selected", imageSrc);
+                clearCanvas();
+                drawImg(Rim, 270, 160, 270, 240);
+                drawImg(Rim, 850, 130, 270, 240);
+                drawImg(Break, 870, 215, 170, 50);
+                drawImg(Wheel, 260, 150, 290, 260);
+                drawImg(Wheel, 840, 120, 290, 260);
+                drawImg(Fork, 473, -21, 880, 360);
+                drawImg(Cogs, 355, 245, 85, 85);
+                drawImg(Stem, 813, 27, 75, 45);
+                drawImg(Excess, 838, 21, 83, 133);
+                drawImg(Seattube, 316, 20, 530, 170);
+                drawImg(Sit, 526, 43, 80, 25);
+                drawImg(Frame, 190, -7, 1030, 440);
+                drawImg(Crank, 510, 209, 375, 205);
+                drawImg(Pedal, 677, 264, 70, 50);
+                drawImg(RD, 367, 275, 75, 60);
+                Break.src = imageSrc;
+            }else if (currentPart === "Chain") {
+                    console.log("Chain image selected", imageSrc);
+                   
+                
+                    
+                        clearCanvas();
+                
+                        drawImg(Rim, 270, 160, 270, 240);
+                        drawImg(Rim, 850, 130, 270, 240);
+                        drawImg(Break, 870, 215, 170, 50);
+                        drawImg(Wheel, 260, 150, 290, 260);
+                        drawImg(Wheel, 840, 120, 290, 260);
+                        drawImg(Fork, 473, -21, 880, 360);
+                        drawImg(Cogs, 355, 245, 85, 85);
+                        drawImg(Stem, 813, 27, 75, 45);
+                        drawImg(Excess, 838, 21, 83, 133);
+                        drawImg(Seattube, 316, 20, 530, 170);
+                        drawImg(Sit, 526, 43, 80, 25);
+                        drawImg(Frame, 190, -7, 1030, 440);
+                        drawImg(Chain, 370, 265, 265, 40);
+                        drawImg(ChainEx, 583, 265, 75, 45);
+                        drawImg(ChainEx1, 348, 255, 125, 85);
+                        drawImg(ChainEx2, 250, 220, 535, 200);
+                        drawImg(Crank, 510, 209, 375, 205);
+                        drawImg(Pedal, 677, 264, 70, 50);
+                        drawImg(RD, 367, 275, 75, 60);
+                         Chain.src = imageSrc;
+                    }
+            else if (currentPart === "Rotor") {
+                console.log("Rotor image selected", imageSrc);
+                clearCanvas();
+                        drawImg(Rotor, 365, 240, 70, 70);
+                        drawImg(Rotor, 950, 215, 70, 70);
+                        drawImg(Rim, 270, 160, 270, 240);
+                        drawImg(Rim, 850, 130, 270, 240);
+                        drawImg(Break, 870, 215, 170, 50);
+                        drawImg(Wheel, 260, 150, 290, 260);
+                        drawImg(Wheel, 840, 120, 290, 260);
+                        drawImg(Fork, 473, -21, 880, 360);
+                        drawImg(Cogs, 355, 245, 85, 85);
+                        drawImg(Stem, 813, 27, 75, 45);
+                        drawImg(Excess, 838, 21, 83, 133);
+                        drawImg(Seattube, 316, 20, 530, 170);
+                        drawImg(Sit, 526, 43, 80, 25);
+                        drawImg(Frame, 190, -7, 1030, 440);
+                        drawImg(Chain, 370, 265, 265, 40);
+                        drawImg(ChainEx, 583, 265, 75, 45);
+                        drawImg(ChainEx1, 348, 255, 125, 85);
+                        drawImg(ChainEx2, 250, 220, 535, 200);
+                        drawImg(Crank, 510, 209, 375, 205);
+                        drawImg(Pedal, 677, 264, 70, 50);
+                        drawImg(RD, 367, 275, 75, 60);
+                Rotor.src = imageSrc;
+            }
+
+            // Handle next and back button functionality
+            nextPart();
+        });
+    });
+}
+
+function nextPart() {
+    // You can proceed with the logic for next part selection here
+    console.log("Proceeding to next part...");
+}
+
+    
+    
+    
+   
+
+    // Function to set up click event listener for the "add" button
+    function setupAddButtonListener() {
+        const addButton = document.getElementById("add");
+        addButton.removeEventListener("click", addButtonClickHandler); // Remove previous listener
+        addButton.addEventListener("click", addButtonClickHandler);
+    }
+    function addTable(){
+        let tr = document.createElement('tr')
+        tr.classList.add('trElement');
+
+        tr.id = part[currentPart].id;
+    
+        let td1 = tr.appendChild(document.createElement('td'));
+        let td2 = tr.appendChild(document.createElement('td'));
+        let td3 = tr.appendChild(document.createElement('td'));
+        let td4 = tr.appendChild(document.createElement('td'));
+       // let td5 = tr.appendChild(document.createElement('td'));
+    
+        td1.innerHTML=currentPart;
+        td2.innerHTML=part[currentPart].brand;
+        td3.innerHTML=part[currentPart].Description;
+        td4.innerHTML=part[currentPart].price;
+        //td5.innerHTML =part[currentPart].id;
+        document.getElementById("tableData").appendChild(tr);
+
+        let price = parseFloat(part[currentPart].price) || 0; // Ensure price is a number
+        total += price;
+
+        totalModal.textContent = "Total: ₱"+ total.toFixed(2);
+    }
+    
+     async function waitForImagesToLoad() {
+        const images = document.querySelectorAll('#container .image img');
+    
+        await Promise.all(Array.from(images).map(image => {
+            return new Promise(resolve => {
+                if (image.complete) {
+                   resolve();
+                } else {
+                    image.onload = resolve;
+                    image.onerror = resolve;
+                }
+           });
+        }));
+    }
+   
+    // Click handler for the "add" button
+    async function addButtonClickHandler() {
+        
+            const container = document.getElementById('container');
+    if (container) {
+        container.style.pointerEvents = 'none'; // Disable the container to prevent clicks
+        container.innerHTML = ''; // Clear existing items
+        
+    }
+        
+        if (!latestImageSrc) {
+            alert("Select an image for the " + currentPart); // Dynamic alert based on the current part
+            return;
+        } else {
+            // Check which part we are working on and validate each one
+            if (currentPart === "Frame") {
+                part.Frame.imageSrc = latestImageSrc;
+                part.Frame.id = selectedItemID;
+                part.Frame.brand = itemBrand;
+                part.Frame.price = selectedItemPrice;
+                part.Frame.Description = itemDesc;
+                
+                
+                addTable();
+                CanvasImage();
+
+
+                console.log("Frame set to:", part.Frame.imageSrc ," This is the frame ID: ", part.Frame.id);
+                currentPart = "Fork";
+                console.log("Now selecting Fork.");
+            } else if (currentPart === "Fork") {
+                if (!latestImageSrc) {
+                    alert("Please select an image for the Fork.");
+                    return;
+                }
+                part.Fork.imageSrc = latestImageSrc;
+                part.Fork.id = selectedItemID;
+                part.Fork.brand = itemBrand;
+                part.Fork.price = selectedItemPrice;
+                part.Fork.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+
+                console.log("Fork set to:",  part.Fork.imageSrc ," This is the frame ID: ", part.Fork.id);
+                currentPart = "Crank"; 
+                console.log("Now selecting Crank.");
+            } else if (currentPart === "Crank") {
+                if (!latestImageSrc) {
+                    alert("Please select an image for the Crank.");
+                    return;
+                }
+                part.Crank.imageSrc = latestImageSrc;
+                part.Crank.id = selectedItemID;
+                part.Crank.brand = itemBrand;
+                part.Crank.price = selectedItemPrice;
+                part.Crank.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+
+                console.log("Fork set to:",  part.Crank.imageSrc ," This is the frame ID: ", part.Crank.id);
+                currentPart = "Pedal";
+                console.log("Now selecting Pedal.");
+            } else if (currentPart === "Pedal") {
+                if (!latestImageSrc) {
+                    alert("Please select an image for the Pedal.");
+                    return;
+                }
+                part.Pedal.imageSrc = latestImageSrc;
+                part.Pedal.id = selectedItemID;
+                part.Pedal.brand = itemBrand;
+                part.Pedal.price = selectedItemPrice;
+                part.Pedal.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Pedal.imageSrc ," This is the frame ID: ", part.Pedal.id);
+                currentPart = "RD";
+                console.log("Now selecting Rear Derailleur.");
+            } else if (currentPart === "RD") {
+                if (!latestImageSrc) {
+                    alert("Please select an image for the Rear Derailleur.");
+                    return;
+                }
+                part.RD.imageSrc = latestImageSrc;
+                part.RD.id = selectedItemID;
+                part.RD.brand = itemBrand;
+                part.RD.price = selectedItemPrice;
+                part.RD.Description = itemDesc;
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.RD.imageSrc ," This is the frame ID: ", part.RD.id);
+                currentPart = "Cogs";
+                console.log("Now selecting Cogs.");
+            } else if (currentPart === "Cogs") {
+                if (!latestImageSrc) {
+                    alert("Please select an image for the Cogs.");
+                    return;
+                }
+                part.Cogs.imageSrc = latestImageSrc;
+                part.Cogs.id = selectedItemID;
+                part.Cogs.brand = itemBrand;
+                part.Cogs.price = selectedItemPrice;
+                part.Cogs.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Cogs.imageSrc ," This is the frame ID: ", part.Cogs.id);
+                currentPart = "Rim";
+                console.log("Now selecting Rim.");
+            }   else if (currentPart === "Rim"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Rim.");
+                    return;
+                }
+                part.Rim.imageSrc = latestImageSrc;
+                part.Rim.id = selectedItemID;
+                part.Rim.brand = itemBrand;
+                part.Rim.price = selectedItemPrice;
+                part.Rim.Description = itemDesc;
+
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Rim.imageSrc ," This is the frame ID: ", part.Rim.id);
+                currentPart = "Wheel";
+                console.log("Now selecting Wheel.");
+
+            } else if (currentPart === "Wheel"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Wheel.");
+                    return;
+                }
+                part.Wheel.imageSrc = latestImageSrc;
+                part.Wheel.id = selectedItemID;
+                part.Wheel.brand = itemBrand;
+                part.Wheel.price = selectedItemPrice;
+                part.Wheel.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Wheel.imageSrc ," This is the frame ID: ", part.Wheel.id);
+                currentPart = "Stem";
+                console.log("Now selecting Stem.");
+            }  else if ( currentPart === "Stem"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Stem.");
+                    return;
+                }
+                part.Stem.imageSrc = latestImageSrc;
+                part.Stem.id = selectedItemID;
+                part.Stem.brand = itemBrand;
+                part.Stem.price = selectedItemPrice;
+                part.Stem.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Stem.imageSrc ," This is the frame ID: ", part.Stem.id);
+                currentPart = "Seattube";
+                console.log("Now selecting Seattube.");
+            }   else if (currentPart === "Seattube"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Seattube.");
+                    return;
+                }
+                part.Seattube.imageSrc = latestImageSrc;
+                part.Seattube.id = selectedItemID;
+                part.Seattube.brand = itemBrand;
+                part.Seattube.price = selectedItemPrice;
+                part.Seattube.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Seattube.imageSrc ," This is the frame ID: ", part.Seattube.id);
+                currentPart = "Sit";
+                console.log("Now selecting Sit");
+            }    else if (currentPart === "Sit"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Sit.");
+                    return;
+                }
+                part.Sit.imageSrc = latestImageSrc;
+                part.Sit.id = selectedItemID;
+                part.Sit.brand = itemBrand;
+                part.Sit.price = selectedItemPrice;
+                part.Sit.Description = itemDesc;
+
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Sit.imageSrc ," This is the frame ID: ", part.Sit.id);
+                currentPart = "Break";
+                console.log("Now Selecting Break.");
+            }    else if (currentPart === "Break"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Break.");
+                    return;
+                }
+                part.Break.imageSrc = latestImageSrc;
+                part.Break.id = selectedItemID;
+                part.Break.brand = itemBrand;
+                part.Break.price = selectedItemPrice;
+                part.Break.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Break.imageSrc ," This is the frame ID: ", part.Break.id);
+                currentPart = "Chain";
+                console.log("Now Selecting Chain.");
+            }    else if (currentPart === "Chain"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Chain.");
+                    return;
+                } 
+                
+                part.Chain.imageSrc = latestImageSrc;
+                part.Chain.id = selectedItemID;
+                part.Chain.brand = itemBrand;
+                part.Chain.price = selectedItemPrice;
+                part.Chain.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Chain.imageSrc ," This is the frame ID: ", part.Chain.id);
+                currentPart = "Rotor";
+                console.log("Now Selecting Rotors.");
+            }    else if (currentPart === "Rotor"){
+                if (!latestImageSrc){
+                    alert("Please select an image for the Rotor.");
+                    return;
+                }
+                part.Rotor.imageSrc = latestImageSrc;
+                part.Rotor.id = selectedItemID;
+                part.Rotor.brand = itemBrand;
+                part.Rotor.price = selectedItemPrice;
+                part.Rotor.Description = itemDesc;
+
+                addTable();
+                CanvasImage();
+                
+                console.log("Fork set to:",  part.Rotor.imageSrc ," This is the frame ID: ", part.Rotor.id);
+                modal.showModal();
+                modal.scrollTop = 0; 
+
+                let create = document.getElementById('new');
+                    if(create){
+                        create.style.display = 'block';
+                    }else{
+                        console.log("Container element not found."); 
+                    }
+                
+
+                let add = document.getElementById('add');
+                    if(add){
+                        add.style.display = 'none';
+                    }else{
+                        console.log("Container element not found.");
+                    }
+
+                let back = document.getElementById('back');
+                if(back){
+                    back.style.display = 'none';
+                }else{
+                    console.log("Container element not found.");
+                }
+
+                let container = document.getElementById('container');
+                    if (container) {
+                     container.style.display = 'none';
+                    } else {
+                     console.log("Container element not found.");
+                    }
+                    
+            }
+            
+            arr.push(latestImageSrc); // Add the latest image source to the array
+            updatePart();
+    
+            console.log("Added to array:", arr);
+            console.log(part);
+
+            latestImageSrc = ""; // Reset the latestImageSrc for the next part selection
+            await getPart(); // Update the part list and fetch new items if needed
+                    if (container) {
+            container.style.pointerEvents = 'auto'; // Enable the container after images are loaded
+        }
+
+        console.log("Container is now clickable again.");
+
+            
+        }
+        
+    }
+    
+    document.getElementById('addCart').addEventListener('click', function() {
+        let rows = document.querySelectorAll('#tableData .trElement');
+        let data = [];
+        
+    
+        rows.forEach((row) => {
+            if (row.cells.length >= 4) {  // Ensure the row has 4 cells
+                let id = row.id;
+                let part = row.cells[0].innerText;
+                let brand = row.cells[1].innerText;
+                let description = row.cells[2].innerText;
+                let price = parseFloat(row.cells[3].innerText.replace)
+    
+                data.push({
+                    id: id,
+                    part: part,
+                    brand: brand,
+                    description: description,
+                    price: price
+                });
+
+              
+
+                console.log('Row:', row); // Inspect each row in the console
+                if (row && row.cells && row.cells.length === 4) {
+                console.log('Valid row with 4 cells:', row.cells);
+                 }
+            }
+        });
+    
+        // Now 'data' holds all table information
+        console.log('this is my data',data); // Check the data in the console
+    
+        // Send the data to your backend for database insertion via AJAX
+        addToCart(data);
+    });
+
+    function addToCart(data) {
+        fetch('addsumarry.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // Sending the data as JSON
+        })
+        .then(response => response.json()) // Parse as JSON
+        .then(result => {
+            if (result.redirect) {
+                // Redirect to login if session is invalid
+                window.location.href = result.redirect;
+            } else if (result.success_msg) {
+                alert(result.success_msg);
+            } else if (result.warning_msg) {
+                alert(result.warning_msg);
+            } else {
+                console.log('Unexpected response:', result);
+            }
+        })
+        .catch(error => {
+            alert('Cart is Empty', error);
+            console.error('Error:', error);
+            // Handle errors
+        });
+    }
+   
+
+    // Initial setup of image click listeners
+    reattachImageClickListeners();
+});
+
+
+// } else if (currentPart === "Break"){
+//     console.log("Break image selected", imageSrc);
+//     Break.onload = () =>{
+//         clearCanvas();
+
+//         drawImg(Rim, 270, 160, 270, 240); 
+//         drawImg(Rim, 850, 130, 270, 240);
+//         drawImg(Break, 870, 215, 170, 50);
+//         drawImg(Wheel, 260, 150, 290, 260); 
+//         drawImg(Wheel, 840, 120, 290, 260);
+//         drawImg(Fork, 473, -21, 880, 360);
+//         drawImg(Cogs,355,245,85,85);
+//         drawImg(Stem, 813, 27, 75, 45);
+//         drawImg(Excess, 838, 21, 83, 133);
+//         drawImg(Seattube, 316, 20 ,530 ,170); 
+//         drawImg(Sit, 526, 43, 80, 25);    
+//         drawImg(Frame, 190, -7, 1030, 440);    
+//         drawImg(Crank, 510, 209, 375, 205);
+//         drawImg(Pedal, 677, 264, 70, 50);
+//         drawImg(RD, 367, 275, 75, 60);
+
+//     }
+//     Break.src = imageSrc;
+
+// }else if (currentPart === "Chain"){
+//     console.log("Chain image selected", imageSrc);
+//     Chain.onload = () =>{
+//         clearCanvas();
+
+        
+//         drawImg(Rim, 270, 160, 270, 240); 
+//         drawImg(Rim, 850, 130, 270, 240);
+//         drawImg(Break, 870, 215, 170, 50);
+//         drawImg(Wheel, 260, 150, 290, 260); 
+//         drawImg(Wheel, 840, 120, 290, 260);
+//         drawImg(Fork, 473, -21, 880, 360);
+//         drawImg(Cogs,355,245,85,85);
+//         drawImg(Stem, 813, 27, 75, 45);
+//         drawImg(Excess, 838, 21, 83, 133);
+//         drawImg(Seattube, 316, 20 ,530 ,170); 
+//         drawImg(Sit, 526, 43, 80, 25);
+            
+//         drawImg(Frame, 190, -7, 1030, 440);
+//         drawImg(Chain,370, 265, 265, 40);
+//         drawImg(ChainEx,583, 265, 75, 45);
+//         drawImg(ChainEx1,348, 255, 125,85);
+//         drawImg(ChainEx2,250, 220, 535, 200);
+//         drawImg(RD, 367, 275, 75, 60);
+        
+//         drawImg(Crank, 510, 209, 375, 205);
+//         drawImg(Pedal, 677, 264, 70, 50);
+        
+
+//     }
+//     Chain.src = imageSrc;
+// }
+//   else if (currentPart === "Rotor"){
+//     console.log("Rotor image selected", imageSrc);
+//     Rotor.onload = () =>{
+//         clearCanvas();
+
+           
+//         drawImg(Rotor, 365,240,70,70);
+//         drawImg(Rotor, 950,215,70,70);
+//         drawImg(Rim, 270, 160, 270, 240); 
+//         drawImg(Rim, 850, 130, 270, 240);
+//         drawImg(Break, 870, 215, 170, 50);
+//         drawImg(Wheel, 260, 150, 290, 260); 
+//         drawImg(Wheel, 840, 120, 290, 260);
+//         drawImg(Fork, 473, -21, 880, 360);
+//         drawImg(Cogs,355,245,85,85);
+//         drawImg(Stem, 813, 27, 75, 45);
+//         drawImg(Excess, 838, 21, 83, 133);
+//         drawImg(Seattube, 316, 20 ,530 ,170); 
+//         drawImg(Sit, 526, 43, 80, 25);
+        
+//         drawImg(Frame, 190, -7, 1030, 440);
+//         drawImg(Chain,370, 265, 265, 40);
+//         drawImg(ChainEx,583, 265, 75, 45);
+//         drawImg(ChainEx1,348, 255, 125,85);
+//         drawImg(ChainEx2,250, 220, 535, 200);; 
+//         drawImg(RD, 367, 275, 75, 60);
+            
+//         drawImg(Crank, 510, 209, 375, 205);
+//         drawImg(Pedal, 677, 264, 70, 50);
+        
+
+//     }
+//     Rotor.src = imageSrc;
+// }  
